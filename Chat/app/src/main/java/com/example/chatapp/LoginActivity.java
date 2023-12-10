@@ -32,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle("Login");
+        getSupportActionBar().setTitle("Login");
 
         auth = FirebaseAuth.getInstance();
 

@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:text="Creat new Accoutn"
+            android:text="Create new Account"
             android:textStyle="bold"/>
 
         <com.rengwuxian.materialedittext.MaterialEditText

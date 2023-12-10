@@ -17,11 +17,23 @@ public class MainActivity extends AppCompatActivity {
     FirebaseUser firebaseUser;
 
     @Override
+    protected void onStart() {
+        super.onStart();
+
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        //check if user is null
+        if(firebaseUser != null){
+            Intent intent = new Intent(MainActivity.this, StartActivity.class);
+            startActivity(intent);
+            finish();
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         //check if user is null
         if(firebaseUser != null){
