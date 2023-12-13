@@ -43,6 +43,8 @@ dependencies {
     implementation("com.google.firebase:firebase-auth:22.3.0")
     implementation("com.google.firebase:firebase-database:20.3.0")
     implementation("com.google.firebase:firebase-core:21.1.1")
+
+    implementation("com.google.firebase:firebase-storage:20.3.0")
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("com.rengwuxian.materialedittext:library:2.1.4")
 
