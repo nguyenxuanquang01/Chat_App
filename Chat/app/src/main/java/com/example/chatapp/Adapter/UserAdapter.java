@@ -13,9 +13,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.chatapp.MessageActivity;
+import com.example.chatapp.Model.Chat;
 import com.example.chatapp.Model.User;
 import com.example.chatapp.R;
 import com.example.chatapp.StartActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
@@ -23,6 +31,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     private Context mcontext;
     private List<User> mUsers;
     private boolean isChat;
+
+    private String last_Message;
 
     public UserAdapter(Context mcontext, List<User> mUsers, boolean isChat) {
         this.mcontext = mcontext;
@@ -68,6 +78,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                 mcontext.startActivity(intent);
             }
         });
+        if(isChat){
+            lastMessage(user.getId(),holder.last_img );
+        }else {
+            holder.last_img.setVisibility(View.GONE);
+        }
+
     }
 
     @Override
@@ -91,5 +107,30 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             img_off = itemView.findViewById(R.id.img_off);
             last_img = itemView.findViewById(R.id.last_msg);
         }
+    }
+
+    private void lastMessage(String userid, TextView last_img){
+        FirebaseUser fuser = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Chats");
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot dataSnapshot :snapshot.getChildren()){
+                    Chat chat = dataSnapshot.getValue(Chat.class);
+                    if((chat.getReceiver().equals(fuser.getUid()) && chat.getSender().equals(userid))
+                            ||(chat.getReceiver().equals(userid) && chat.getSender().equals(fuser.getUid()))){
+                        last_Message = chat.getMessage().toString();
+                    }
+                }
+
+                last_img.setText(last_Message);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }
